@@ -1,6 +1,6 @@
 {
   "name": "tap-logel",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "bin": {
@@ -9,7 +9,7 @@
   "author": "Yanis Benson <yanis.benson+project.nodejs.tap.logel@gmail.com",
   "license": "CC0-1.0",
   "dependencies": {
-    "logel": "^0.1.2",
+    "logel": "^0.2.0",
     "tap-parser": "^9.3.2"
   }
 }
