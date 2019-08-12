@@ -2,7 +2,6 @@
 const TapParser = require('tap-parser');
 const log = require('logel').Logel.make().log();
 let parser = new TapParser();
-process.stdin.pipe(parser);
 
 let currentExtras = [];
 parser.on('extra', extra => {
@@ -34,5 +33,18 @@ parser.on('complete', status => {
 	} else {
 		log.error('tests complete', ctx);
 	}
-	process.exit(status.ok ? 0 : 1);
+	// process.exit(status.ok ? 0 : 1);
 });
+
+if (process.argv.length > 2) {
+	const ChildProcess = require('child_process');
+
+	let cmd = process.argv[2];
+	let args = process.argv.slice(3);
+	let child = ChildProcess.spawn(cmd, args, {
+		stdio: ['inherit', 'pipe', 'inherit'],
+	});
+	child.stdout.pipe(parser);
+} else {
+	process.stdin.pipe(parser);
+}
