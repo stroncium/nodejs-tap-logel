@@ -31,10 +31,13 @@ parser.on('complete', status => {
 	if (status.ok) {
 		log.info('tests complete', ctx);
 	} else {
+		if (process.exitCode === 0) {
+			process.exitCode = 1;
+		}
 		log.error('tests complete', ctx);
 	}
-	// process.exit(status.ok ? 0 : 1);
 });
+
 
 if (process.argv.length > 2) {
 	const ChildProcess = require('child_process');
@@ -44,7 +47,14 @@ if (process.argv.length > 2) {
 	let child = ChildProcess.spawn(cmd, args, {
 		stdio: ['inherit', 'pipe', 'inherit'],
 	});
+
+	child.on('exit', code => {
+		process.exitCode = code;
+	})
+
 	child.stdout.pipe(parser);
 } else {
 	process.stdin.pipe(parser);
 }
+
+process.on('beforeExit',
